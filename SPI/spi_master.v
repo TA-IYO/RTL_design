@@ -112,7 +112,18 @@ begin
     else            sck_index <= ~s_send ? 6'b0 : (sck_cnt==10'b0) ? sck_index+1'b1 : sck_index;
 end
 
-//////////////////// SS, SCK, MOSI, MISO
+//////////////////// STATE TRANSITION
+
+always @(posedge clk or negedge rst) 
+begin
+    if(~rst)    m_state <= M_IDLE;
+    else        m_state <= (s_idle  & (startw_pedge | startr_pedge)          ) ? M_READY :
+                           (s_ready & (ready_cnt==freq)                      ) ? M_SEND  :
+                           (s_send  & (sck_index==6'd48) & (sck_cnt==10'b0)  ) ? M_DONE  :
+                           (s_done  & (done_cnt==4'd15)                      ) ? M_IDLE  : m_state;
+end
+
+//////////////////// SS, SCK
 
 reg             ss;
 always @(posedge clk or negedge rst)
@@ -129,6 +140,8 @@ begin
     if(~rst)    sck <= 1'b0;
     else        sck <= ~s_send ? 1'b0 : ((sck_index<6'd48) && (sck_cnt==10'b0)) ? ~sck : sck;
 end
+
+//////////////////// MOSI
 
 reg             mosi;
 always @(posedge clk or negedge rst)
@@ -159,8 +172,10 @@ begin
                         (s_send  & (sck_index==6'd41) & (sck_cnt==10'b0)) ? (~rw_flag ? wdata[2] : 1'b0) :
                         (s_send  & (sck_index==6'd43) & (sck_cnt==10'b0)) ? (~rw_flag ? wdata[1] : 1'b0) :
                         (s_send  & (sck_index==6'd45) & (sck_cnt==10'b0)) ? (~rw_flag ? wdata[0] : 1'b0) :
-                        (s_send  & (sck_index==6'd29) & (sck_cnt==10'b0)) ? 1'b0 : mosi;
+                        (s_send  & (sck_index==6'd47) & (sck_cnt==10'b0)) ? 1'b0 : mosi;
 end
+
+//////////////////// MISO
 
 reg     [7:0]   rdata;
 always @(posedge clk or negedge rst)
@@ -178,23 +193,14 @@ begin
     end
 end
 
+//////////////////// DONE
+
 reg             done;
 always @(posedge clk or negedge rst) 
 begin
     if(~rst)    done <= 1'b0;
     else        done <= (startw_pedge | startr_pedge) ? 1'b0 :
                         (s_done & (done_cnt==4'd15) ) ? 1'b1 : done;   
-end
-
-//////////////////// STATE TRANSITION
-
-always @(posedge clk or negedge rst) 
-begin
-    if(~rst)    m_state <= 2'b0;
-    else        m_state <= (s_idle  & (startw_pedge | startr_pedge)          ) ? M_READY :
-                           (s_ready & (ready_cnt==freq)                      ) ? M_SEND  :
-                           (s_send  & (sck_index==6'd48) & (sck_cnt==10'b0)  ) ? M_DONE  :
-                           (s_done  & (done_cnt==4'd15)                      ) ? M_IDLE  : m_state;
 end
 
 endmodule
