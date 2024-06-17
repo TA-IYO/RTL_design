@@ -1,3 +1,4 @@
+`include "./spi_master.v"
 `timescale 1ns/1ps
 
 module tb_spi_master();
@@ -38,11 +39,11 @@ wire            mosi    ;
 spi_master      spi_master_dut(
     .rst        (rst    ),    
     .clk        (clk    ),
-    .freq       (freq   ),
+    .freq       (10'd100),
     .start_w    (start_w),
     .start_r    (start_r),
-    .addr       (addr   ),
-    .wdata      (wdata  ),
+    .addr       (8'h55  ),
+    .wdata      (8'haa  ),
     .rdata      (rdata  ),
     .done       (done   ),
     .ss         (ss     ),
@@ -51,11 +52,10 @@ spi_master      spi_master_dut(
     .miso       (1'b0   )
 );
 
+initial begin
+    $dumpvars;
+    $dumpflush;
+    #500000 $finish;
+end
+
 endmodule
-
-
-
-
-
-
-)
