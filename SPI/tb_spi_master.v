@@ -53,9 +53,11 @@ spi_master      spi_master_dut(
 );
 
 initial begin
-    $dumpvars;
+    $dumpfile("tb_spi_master.vcd");
+    $dumpvars(0, tb_spi_master);
     $dumpflush;
-    #500000 $finish;
+    #500000 
+    $finish;
 end
 
 endmodule
