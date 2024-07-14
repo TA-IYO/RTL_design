@@ -4,7 +4,7 @@ module pc (
     output  reg     [31:0]  pc
 );
     always @(posedge clk, negedge rstn) begin
-        if(~rstn)
+        if (~rstn)
             pc  <=  32'h0;
         else
             pc  <=  pc + 4;
