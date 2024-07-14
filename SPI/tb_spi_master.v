@@ -11,7 +11,7 @@ initial begin
 #10000  rst = 1;
 end
 
-always #5   clk = ~clk;
+always #5   clk = ~clk; 
 
 reg     [14:0]  cnt;
 always @(posedge clk or negedge rst) begin
