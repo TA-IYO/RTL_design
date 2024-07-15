@@ -1,4 +1,5 @@
-`timescale 1ps/1ps
+`timescale 1ns/1ps
+
 module tb_alu;
     reg     [31:0]  a, b;
     reg     [4:0]   alu_ctrl;
