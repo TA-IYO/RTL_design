@@ -1,4 +1,3 @@
-`include "alu.v"
 `timescale 1ps/1ps
 module tb_alu;
     reg     [31:0]  a, b;
