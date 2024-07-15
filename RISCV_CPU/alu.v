@@ -8,7 +8,7 @@ module alu (
     wire    [31:0]  b2,sum;
     wire            slt, sltu;
 
-    assign b2 = alu_ctrl? ~b : b;
+    assign b2 = alu_ctrl[4]? ~b : b;
 
     assign slt = N ^ V; 
     assign sltu = ~C;  
@@ -82,7 +82,7 @@ module add_sub (
     adder_1bit bit00 (.a(a[0]), .b(b[0]), .cin(cin), .sum(sum[0]), .cout(cout[0]));
 
     assign N = sum[31];
-    assign Z = (sum == 32'b0); // ~(|sum)
+    assign Z = ~(|sum); //(sum == 32'b0);
     assign C = cout[31];
     assign V = cout[31] ^ cout[30];
 

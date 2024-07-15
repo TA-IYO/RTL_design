@@ -8,6 +8,11 @@
 `define     OP_U_AUIPC      7'b001_0111
 `define     OP_J_JAL        7'b110_1111
 
+module ctrl_unit(
+
+);
+endmodule
+
 module alu_det(
     input   wire    [6:0]   opcode,
     input   wire    [6:0]   funct7,
@@ -59,4 +64,10 @@ module alu_det(
             default: alu_ctrl <= 5'b00000;
         endcase
     end
+endmodule
+
+module rw_det(
+
+);
+
 endmodule

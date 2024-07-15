@@ -1,6 +1,5 @@
 module regfile (
     input   wire                clk,
-    input   wire                rstn,
     input   wire                we,
     input   wire    [4:0]       rs1, rs2, rd,
     input   wire    [31:0]      rd_data,
@@ -8,79 +7,43 @@ module regfile (
 );
     reg [31:0]  x   [31:0];
 
-    always @(posedge clk, negedge rstn) begin
-        if (~rstn) begin
-            x[0] <= 32'h0;
-            x[1] <= 32'h0;
-            x[2] <= 32'h0;
-            x[3] <= 32'h0;
-            x[4] <= 32'h0;
-            x[5] <= 32'h0;
-            x[6] <= 32'h0;
-            x[7] <= 32'h0;
-            x[8] <= 32'h0;
-            x[9] <= 32'h0;
-            x[10] <= 32'h0;
-            x[11] <= 32'h0;
-            x[12] <= 32'h0;
-            x[13] <= 32'h0;
-            x[14] <= 32'h0;
-            x[15] <= 32'h0;
-            x[16] <= 32'h0;
-            x[17] <= 32'h0;
-            x[18] <= 32'h0;
-            x[19] <= 32'h0;
-            x[20] <= 32'h0;
-            x[21] <= 32'h0;
-            x[22] <= 32'h0;
-            x[23] <= 32'h0;
-            x[24] <= 32'h0;
-            x[25] <= 32'h0;
-            x[26] <= 32'h0;
-            x[27] <= 32'h0;
-            x[28] <= 32'h0;
-            x[29] <= 32'h0;
-            x[30] <= 32'h0;
-            x[31] <= 32'h0;
+    always @(posedge clk) begin
+        if (we)
+            case (rd[4:0])
+                5'd0: ;
+                5'd1:   x[1] <= rd_data;
+                5'd2:   x[2] <= rd_data;
+                5'd3:   x[3] <= rd_data;
+                5'd4:   x[4] <= rd_data;
+                5'd5:   x[5] <= rd_data;
+                5'd6:   x[6] <= rd_data;
+                5'd7:   x[7] <= rd_data;
+                5'd8:   x[8] <= rd_data;
+                5'd9:   x[9] <= rd_data;
+                5'd10:  x[10] <= rd_data;
+                5'd11:  x[11] <= rd_data;
+                5'd12:  x[12] <= rd_data;
+                5'd13:  x[13] <= rd_data;
+                5'd14:  x[14] <= rd_data;
+                5'd15:  x[15] <= rd_data;
+                5'd16:  x[16] <= rd_data;
+                5'd17:  x[17] <= rd_data;
+                5'd18:  x[18] <= rd_data;
+                5'd19:  x[19] <= rd_data;
+                5'd20:  x[20] <= rd_data;
+                5'd21:  x[21] <= rd_data;
+                5'd22:  x[22] <= rd_data;
+                5'd23:  x[23] <= rd_data;
+                5'd24:  x[24] <= rd_data;
+                5'd25:  x[25] <= rd_data;
+                5'd26:  x[26] <= rd_data;
+                5'd27:  x[27] <= rd_data;
+                5'd28:  x[28] <= rd_data;
+                5'd29:  x[29] <= rd_data;
+                5'd30:  x[30] <= rd_data;
+                5'd31:  x[31] <= rd_data;
+            endcase
         end
-        else begin
-            if (we)
-                case (rd[4:0])
-                    5'd0: ;
-                    5'd1:   x[1] <= rd_data;
-                    5'd2:   x[2] <= rd_data;
-                    5'd3:   x[3] <= rd_data;
-                    5'd4:   x[4] <= rd_data;
-                    5'd5:   x[5] <= rd_data;
-                    5'd6:   x[6] <= rd_data;
-                    5'd7:   x[7] <= rd_data;
-                    5'd8:   x[8] <= rd_data;
-                    5'd9:   x[9] <= rd_data;
-                    5'd10:  x[10] <= rd_data;
-                    5'd11:  x[11] <= rd_data;
-                    5'd12:  x[12] <= rd_data;
-                    5'd13:  x[13] <= rd_data;
-                    5'd14:  x[14] <= rd_data;
-                    5'd15:  x[15] <= rd_data;
-                    5'd16:  x[16] <= rd_data;
-                    5'd17:  x[17] <= rd_data;
-                    5'd18:  x[18] <= rd_data;
-                    5'd19:  x[19] <= rd_data;
-                    5'd20:  x[20] <= rd_data;
-                    5'd21:  x[21] <= rd_data;
-                    5'd22:  x[22] <= rd_data;
-                    5'd23:  x[23] <= rd_data;
-                    5'd24:  x[24] <= rd_data;
-                    5'd25:  x[25] <= rd_data;
-                    5'd26:  x[26] <= rd_data;
-                    5'd27:  x[27] <= rd_data;
-                    5'd28:  x[28] <= rd_data;
-                    5'd29:  x[29] <= rd_data;
-                    5'd30:  x[30] <= rd_data;
-                    5'd31:  x[31] <= rd_data;
-                endcase
-        end
-    end
 
     always @(*) begin
         case (rs1[4:0])

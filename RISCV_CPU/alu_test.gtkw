@@ -1,0 +1,38 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Mon Jul 15 04:28:42 2024
+[*]
+[dumpfile] "D:\000Repository\RTL_design\RISCV_CPU\tb_alu.vcd"
+[dumpfile_mtime] "Mon Jul 15 04:25:35 2024"
+[dumpfile_size] 11690
+[savefile] "D:\000Repository\RTL_design\RISCV_CPU\alu_test.gtkw"
+[timestart] 0
+[size] 1536 793
+[pos] -35 -35
+*-6.703900 239 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_alu.
+[treeopen] tb_alu.u0.
+[sst_width] 197
+[signals_width] 199
+[sst_expanded] 1
+[sst_vpaned_height] 221
+@28
+tb_alu.u0.C
+tb_alu.u0.N
+@29
+tb_alu.u0.V
+@28
+tb_alu.u0.Z
+@22
+tb_alu.u0.alu_ctrl[4:0]
+tb_alu.u0.a[31:0]
+tb_alu.u0.b[31:0]
+tb_alu.u0.b2[31:0]
+tb_alu.u0.sum[31:0]
+tb_alu.u0.adder_subtractor.cout[31:0]
+tb_alu.u0.result[31:0]
+@28
+tb_alu.u0.slt
+tb_alu.u0.sltu
+[pattern_trace] 1
+[pattern_trace] 0
