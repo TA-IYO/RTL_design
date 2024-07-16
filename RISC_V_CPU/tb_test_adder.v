@@ -31,7 +31,7 @@ test_adder test(
 );
 
 initial begin
-    a = 8'hff; b = 8'h80; sub = 1'b0; #10
+    a = 8'h55; b = 8'h44; sub = 1'b0; #10
     a = 8'hab; b = 8'h12; sub = 1'b0; #10
     a = 8'h44; b = 8'h11; sub = 1'b0; #10
     a = 8'h00; b = 8'h00; sub = 1'b0; #10

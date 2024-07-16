@@ -25,6 +25,7 @@ always @(posedge clk or negedge rst) begin
     else        start_w <= (cnt==15'd1000) ? 1'b1 : (cnt==15'd1010) ? 1'b0 : start_w;
 end
 
+
 reg             start_r;
 always @(posedge clk or negedge rst) begin
     if(~rst)    start_r <= 1'b0;

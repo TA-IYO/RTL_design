@@ -15,6 +15,8 @@ module spi_master(
     mosi,
     miso
 );
+
+
 input           rst     ;
 input           clk     ;
 input   [9:0]   freq    ;
@@ -30,6 +32,7 @@ output          mosi    ;
 input           miso    ;
 
 //////////////////// DEFINE STATES
+
 
 parameter SLAVE_IDW =  8'h64;
 parameter SLAVE_IDR =  8'h65;

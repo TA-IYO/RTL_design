@@ -14,6 +14,7 @@ initial 	begin
 
 end	
 
+
 always  #5	clk = ~clk;
 
 

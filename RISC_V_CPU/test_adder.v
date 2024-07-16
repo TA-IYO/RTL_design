@@ -9,9 +9,9 @@ module test_adder (
     output                  V    // Overflow flag
 );
 
-    wire [31:0] b_eff;       // Effective B (B or ~B)
-    wire [31:0] p, g;        // Generate and Propagate
-    wire [31:0] c;           // Carry bits
+    wire [7:0] b_eff;       // Effective B (B or ~B)
+    wire [7:0] p, g;        // Generate and Propagate
+    wire [7:0] c;           // Carry bits
 
     // Effective B calculation based on Sub signal
     assign b_eff = b ^ {32{sub}};  // XOR with Sub to get B or ~B
@@ -69,7 +69,7 @@ module test_adder (
 
     // Flags
     assign N = sum[7];          // Negative flag
-    assign Z = (sum == 7'b0);   // Zero flag
+    assign Z = (sum == 8'b0);   // Zero flag
     assign C = c[7];             // Carry flag
     assign V = c[7] ^ c[7];  // Overflow flag
 

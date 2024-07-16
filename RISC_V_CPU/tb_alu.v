@@ -78,4 +78,5 @@ alu u0 (.a(a), .b(b), .alu_ctrl(alu_ctrl), .result(result), .N(N), .Z(Z), .C(C),
         #600
         $finish;    
     end
+
 endmodule

@@ -14,6 +14,7 @@ module spi_slave(
     miso    
 );
 
+
 input       rst     ;
 input       clk     ;
 input       ss      ;
