@@ -19,7 +19,7 @@ initial begin
     rstn = 1;
 end
 
-test_adder(
+test_adder test(
     .a(a),
     .b(b),
     .sub(sub),
@@ -29,6 +29,17 @@ test_adder(
     .C(C),
     .V(V)
 );
+
+initial begin
+    a = 8'hff; b = 8'h80; sub = 1'b0; #10
+    a = 8'hab; b = 8'h12; sub = 1'b0; #10
+    a = 8'h44; b = 8'h11; sub = 1'b0; #10
+    a = 8'h00; b = 8'h00; sub = 1'b0; #10
+    a = 8'h01; b = 8'h10; sub = 1'b1; #10
+    a = 8'hff; b = 8'h80; sub = 1'b1; #10
+    a = 8'h78; b = 8'h34; sub = 1'b1; #10
+    a = 8'h00; b = 8'h00; sub = 1'b1; 
+end
 
 
 

@@ -56,13 +56,13 @@ module test_adder (
 
     // Carry calculation
     assign c[0] = sub;
-    c_gen carry_1(.g(1), .p(1), .c_pre(c[0]), .c(c[1]));
-    c_gen carry_2(.g(2), .p(2), .c_pre(c[1]), .c(c[2]));
-    c_gen carry_3(.g(3), .p(3), .c_pre(c[2]), .c(c[3]));
-    c_gen carry_4(.g(4), .p(4), .c_pre(c[3]), .c(c[4]));
-    c_gen carry_5(.g(5), .p(5), .c_pre(c[4]), .c(c[5]));
-    c_gen carry_6(.g(6), .p(6), .c_pre(c[5]), .c(c[6]));
-    c_gen carry_7(.g(7), .p(7), .c_pre(c[6]), .c(c[7]));
+    c_gen carry_1(.g(g[1]), .p(p[1]), .c_pre(c[0]), .c(c[1]));
+    c_gen carry_2(.g(g[2]), .p(p[2]), .c_pre(c[1]), .c(c[2]));
+    c_gen carry_3(.g(g[3]), .p(p[3]), .c_pre(c[2]), .c(c[3]));
+    c_gen carry_4(.g(g[4]), .p(p[4]), .c_pre(c[3]), .c(c[4]));
+    c_gen carry_5(.g(g[5]), .p(p[5]), .c_pre(c[4]), .c(c[5]));
+    c_gen carry_6(.g(g[6]), .p(p[6]), .c_pre(c[5]), .c(c[6]));
+    c_gen carry_7(.g(g[7]), .p(p[7]), .c_pre(c[6]), .c(c[7]));
 
     // Sum calculation
     assign sum = p ^ c;
