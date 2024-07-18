@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+`include "IF.v"
 module tb_IF;
 
     reg             clk;
@@ -25,7 +27,6 @@ IF instuction_fetch(
 initial begin
     $dumpfile("tb_IF.vcd");
     $dumpvars(0, tb_IF);
-    $dumpflush;
     #100
     $finish;
 end

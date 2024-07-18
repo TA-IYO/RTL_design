@@ -1,5 +1,5 @@
 $date
-	Tue Jul 16 01:49:06 2024
+	Wed Jul 17 14:50:15 2024
 $end
 $version
 	Icarus Verilog
@@ -7,7 +7,7 @@ $end
 $timescale
 	1ps
 $end
-$scope module tb_alu $end
+$scope module tb_EXE $end
 $var wire 32 ! result [31:0] $end
 $var wire 1 " Z $end
 $var wire 1 # V $end

@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
-
-module tb_alu;
+`include "EXE.v"
+module tb_EXE;
     reg     [31:0]  a, b;
     reg     [4:0]   alu_ctrl;
     wire    [31:0]  result;
@@ -9,7 +9,7 @@ module tb_alu;
 alu u0 (.a(a), .b(b), .alu_ctrl(alu_ctrl), .result(result), .N(N), .Z(Z), .C(C), .V(V));
 
     initial begin
-            
+
             a = 32'hf0000000;
             b = 32'h90000000;
             alu_ctrl = 5'b00000;
@@ -72,9 +72,8 @@ alu u0 (.a(a), .b(b), .alu_ctrl(alu_ctrl), .result(result), .N(N), .Z(Z), .C(C),
     end
 
     initial begin
-        $dumpfile("tb_alu.vcd");
-        $dumpvars(0, tb_alu);
-        $dumpflush;
+        $dumpfile("tb_EXE.vcd");
+        $dumpvars(0, tb_EXE);
         #600
         $finish;    
     end
