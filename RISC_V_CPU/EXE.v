@@ -3,26 +3,23 @@ module EXE (
     input   wire    [31:0]      i_rs1_data,
     input   wire    [31:0]      i_rs2_data,
     input   wire    [31:0]      i_imm,
-    input   wire    [31:0]      i_wb_data,
     input   wire                i_alu_src,
     input   wire    [4:0]       i_alu_ctrl,
-    output  wire    [31:0]      o_wb_data,
-    output  wire    [31:0]      o_pc_branch,
-    output  wire    [31:0]      o_rd_data,
     output  wire    [31:0]      o_data_addr,
-    output  wire    [31:0]      o_data_wr
+    output  wire    [31:0]      o_data_wr,
+    output  wire                o_Z
 );
     wire    N, Z, C, V;
-    wire    [31:0]   rs2_data;
-    assign  rs2_data = i_alu_src ? i_imm : i_rs1_data;
-    assign  o_pc_branch = i_pc + (i_imm << 1);
-    assign o_wb_data = i_wb_data;
+    wire    [31:0]      rs2_data;
+    wire    [4:0]       alu_ctrl = i_alu_ctrl;
+    assign  rs2_data    = i_alu_src ? i_imm : i_rs1_data;
+    assign  o_data_wr   = i_rs2_data;
 
     alu arithmetic_logic (
-        .a          (i_rs1_data),
-        .b          (i_b),
-        .alu_ctrl   (alu_ctrl),
-        .result     (alu_result),
+        .a          (i_rs1_data ),
+        .b          (rs2_data   ),
+        .alu_ctrl   (alu_ctrl   ),
+        .result     (o_data_addr),
         .N(N), .Z(Z), .C(C), .V(V)
     );
 

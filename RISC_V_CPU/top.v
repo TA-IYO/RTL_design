@@ -1,64 +1,91 @@
+
 module top(
     input   wire    clk,
     input   wire    rstn
 );
+//IF
     wire    [31:0]      pc;
     wire    [31:0]      instruction;
+    wire    [31:0]      jal_addr;
+//ID             
+    wire    [31:0]      rd_data;                         
+    wire    [4:0]       rd;             
+    wire    [31:0]      rs1_data;             
+    wire    [31:0]      rs2_data;             
+    wire    [31:0]      immediate_i;             
+    wire    [31:0]      immediate_j;             
+    wire                alu_src;            
+    wire    [4:0]       alu_ctrl;             
+    wire                jal;             
+    wire                beq;             
+    wire                memwrite;             
+    wire                memtoreg;
+//EXE
+    wire    [31:0]      data_addr;
+    wire    [31:0]      data_wr;
+    wire                Z;
+//WB
+    wire    [31:0]      data_addr_to_reg;
+    wire    [31:0]      data_rd;
+
+    wire    btaken = (beq == Z);
 
     IF instruction_fetch (
         .i_clk          (clk        ),
         .i_rstn         (rstn       ),
-        .o_pc           (pc         ),
+        .i_btaken       (btaken     ),
+        .i_jal          (jal        ),
+        .i_imm_i        (immediate_i),
+        .i_imm_j        (immediate_j),
+        .o_jal_addr     (jal_addr   ),
         .o_inst         (instruction)
     );
 
     ID instruction_decode (
-        i_clk           (clk        ),
-        i_inst          (instruction),
-        i_rd            (rd         ),
-        i_rd_data       (rd_data    ),
-        i_pc            (if_pc      ),
-        o_pc            (id_pc      ),
-        o_rs1_data      (rs1_data   ),
-        o_rs2_data      (rs2_data   ),
-        o_imm           (immediate  ),
-        o_alu_src       (alu_src    ),
-        o_alu_ctrl      (alu_ctrl   ),
-        o_jal           (jal        ),
-        o_beq           (beq        ),
-        o_memwrite      (memwrite   ),
-        o_memtoreg      (memtoreg   ),
+        .i_clk           (clk        ),
+        .i_inst          (instruction),
+        .i_rd_data       (rd_data    ),
+        .o_rd            (rd         ),
+        .o_rs1_data      (rs1_data   ),
+        .o_rs2_data      (rs2_data   ),
+        .o_imm_i         (immediate_i),
+        .o_imm_j         (immediate_j),
+        .o_alu_src       (alu_src    ),
+        .o_alu_ctrl      (alu_ctrl   ),
+        .o_jal           (jal        ),
+        .o_beq           (beq        ),
+        .o_memwrite      (memwrite   ),
+        .o_memtoreg      (memtoreg   )
     );
 
     EXE execution (
-        i_pc            (pc         ),
-        i_rs1_data      (rs1_data   ),
-        i_rs2_data      (rs2_data   ),
-        i_imm           (immediate  ),
-        i_wb_data       (i_wb_data  ),
-        i_alu_src       (alu_src    ),      
-        i_alu_ctrl      (alu_ctrl   ),
-        o_wb_data       (wb_data    ),
-        o_pc_branch     (pc_branch  ),
-        o_rd_data       (rd_data    ),
-        o_data_addr     (data_addr  ),
-        o_data_wr       (data_wr    )
+        .i_pc            (pc         ),
+        .i_rs1_data      (rs1_data   ),
+        .i_rs2_data      (rs2_data   ),
+        .i_imm           (immediate_i),
+        .i_alu_src       (alu_src    ),      
+        .i_alu_ctrl      (alu_ctrl   ),
+        .o_data_addr     (data_addr  ),
+        .o_data_wr       (data_wr    ),
+        .o_Z             (Z          )
     );
 
     MEM data_memory (
-        i_clk           (clk            ),
-        i_we            (memwrite       ),
-        i_data_addr     (data_addr      ),
-        i_data_wr       (data_wr        ),
-        o_data_addr_mux (data_addr_mux  ),
-        o_data_rd       (data_rd        )
+        .i_clk           (clk               ),
+        .i_we            (memwrite          ),
+        .i_data_addr     (data_addr         ),
+        .i_data_wr       (data_wr           ),
+        .o_data_addr     (data_addr_to_reg  ),
+        .o_data_rd       (data_rd           )
     );
 
     WB write_back (
-        i_data_addr_mux (data_addr_mux  ),
-        i_data_rd       (data_rd        ),
-        i_memtoreg      (memtoreg       ),
-        o_wb_data       (wb_data        )
+        .i_data_addr     (data_addr_to_reg  ),
+        .i_data_rd       (data_rd           ),
+        .i_jal_addr      (jal_addr          ),
+        .i_memtoreg      (memtoreg          ),
+        .i_jal           (jal               ),
+        .o_rd_data       (rd_data           )
     );
 
 endmodule

@@ -3,8 +3,8 @@ module MEM (
     input   wire                i_we,
     input   wire    [31:0]      i_data_addr,
     input   wire    [31:0]      i_data_wr,
-    input   wire    [31:0]      o_data_addr_mux,
-    input   wire    [31:0]      o_data_rd
+    output  wire    [31:0]      o_data_addr,
+    output  wire    [31:0]      o_data_rd
 );
     wire            clk = i_clk;
     wire            we = i_we;
@@ -17,15 +17,9 @@ data_memory DATA (
     .read_data          (o_data_rd  )
 );
 
-    assign o_data_addr_mux = i_data_addr;
+    assign o_data_addr = i_data_addr;
 
 endmodule
-
-
-
-
-
-
 
 
 
@@ -40,7 +34,7 @@ module data_memory (
     reg [31:0] memory [0:255];
 
     initial begin
-        $readmemh("data_mem.hex", memory);
+        $readmemh("data_mem.txt", memory);
     end
 
     always @(posedge clk) begin

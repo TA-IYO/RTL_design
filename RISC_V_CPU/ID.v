@@ -11,22 +11,21 @@
 module ID(
     input   wire                i_clk,
     input   wire    [31:0]      i_inst,
-    input   wire    [4:0 ]      i_rd,
     input   wire    [31:0]      i_rd_data,
-    input   wire    [31:0]      i_pc,
-    output  wire    [31:0]      o_pc,
+    output  wire    [4:0]       o_rd,
     output  wire    [31:0]      o_rs1_data,
     output  wire    [31:0]      o_rs2_data,
-    output  wire    [31:0]      o_imm,
+    output  wire    [31:0]      o_imm_i,
+    output  wire    [31:0]      o_imm_j,
     output  wire                o_alu_src,
     output  wire    [4:0 ]      o_alu_ctrl,
     output  wire                o_jal,
     output  wire                o_beq,
     output  wire                o_memwrite,
-    output  wire                o_memtoreg,
+    output  wire                o_memtoreg
 );
     wire            clk = i_clk;
-    wire            inst = i_inst;
+    wire    [31:0]  inst = i_inst;
     wire    [6:0]   funct7;
     wire    [4:0]   rs2, rs1;
     wire    [2:0]   funct3;
@@ -34,7 +33,6 @@ module ID(
     wire    [6:0]   opcode;
 
     wire    [31:0]  rs1_data, rs2_data;
-    reg     [31:0]  rd_data;
     wire    [4:0]   alu_ctrl;
     wire            regwrite;
     reg             pc; 
@@ -73,10 +71,8 @@ regfile register_files(
     .rs2_data   (rs2_data)
 );
 
-always @(posedge clk)
-    pc <= i_pc;
-assign o_pc = pc;
-assign o_imm[31:0] = {{20{inst[31]}}, inst[31:20]} ;
+assign o_imm_i[31:0] = {{20{inst[31]}}, inst[31:20]} ;
+assign o_imm_j[31:0] = {inst[20], inst[10:1], inst[11], inst[19:12]} ;
 
 endmodule
 
