@@ -9,25 +9,37 @@
 `define     OP_J_JAL        7'b110_1111
 
 module ID(
-    input   wire            clk,
-    input   wire    [31:0]  inst,
-    input   wire    [4:0]   i_rd,
-    input   wire    [31:0]  i_rd_data,
-    input   wire    [31:0]  i_pc,
-    output  wire    [31:0]  o_pc,
-    output  wire    [31:0]  o_rs1_data,
-    output  wire    [31:0]  o_rs2_data,
-    output  wire    [31:0]  o_imm,
-    output  wire    [4:0]   o_rd
+    input   wire                i_clk,
+    input   wire    [31:0]      i_inst,
+    input   wire    [4:0 ]      i_rd,
+    input   wire    [31:0]      i_rd_data,
+    input   wire    [31:0]      i_pc,
+    output  wire    [31:0]      o_pc,
+    output  wire    [31:0]      o_rs1_data,
+    output  wire    [31:0]      o_rs2_data,
+    output  wire    [31:0]      o_imm,
+    output  wire                o_alu_src,
+    output  wire    [4:0 ]      o_alu_ctrl,
+    output  wire                o_jal,
+    output  wire                o_beq,
+    output  wire                o_memwrite,
+    output  wire                o_memtoreg,
 );
-    wire    [6:0]   opcode;
+    wire            clk = i_clk;
+    wire            inst = i_inst;
     wire    [6:0]   funct7;
+    wire    [4:0]   rs2, rs1;
     wire    [2:0]   funct3;
-    wire    [4:0]   rs2, rs1, rd;
+    wire    [4:0]   rd;
+    wire    [6:0]   opcode;
+
     wire    [31:0]  rs1_data, rs2_data;
     reg     [31:0]  rd_data;
     wire    [4:0]   alu_ctrl;
     wire            regwrite;
+    reg             pc; 
+    wire    [31:0]  rd_data;
+    wire            memtoreg;
 
     assign funct7   =   inst[31:25];
     assign rs2      =   inst[24:20];
@@ -35,13 +47,19 @@ module ID(
     assign funct3   =   inst[14:12];
     assign rd       =   inst[11:7];
     assign opcode   =   inst[6:0];
+    assign o_alu_ctrl = alu_ctrl;
 
 ctrl_unit control_unit(
     .opcode         (opcode)    ,
     .funct7         (funct7)    ,
     .funct3         (funct3)    ,
     .alu_ctrl       (alu_ctrl)  ,
-    .regwrite       (regwrite)  
+    .regwrite       (regwrite)  ,
+    .alu_src        (o_alu_src) ,
+    .jal            (o_jal)     ,
+    .beq            (o_beq)     ,
+    .memwrite       (o_memwrite),
+    .memtoreg       (o_memtoreg)
 );
 
 regfile register_files(
@@ -55,14 +73,26 @@ regfile register_files(
     .rs2_data   (rs2_data)
 );
 
+always @(posedge clk)
+    pc <= i_pc;
+assign o_pc = pc;
+assign o_imm[31:0] = {{20{inst[31]}}, inst[31:20]} ;
+
 endmodule
+
+
 
 module ctrl_unit(
     input   wire    [6:0]   opcode,
     input   wire    [6:0]   funct7,
     input   wire    [2:0]   funct3,
     output  wire    [4:0]   alu_ctrl,
-    output  wire            regwrite
+    output  wire            regwrite,
+    output  wire            alu_src,
+    output  wire            jal,
+    output  wire            beq,
+    output  wire            memwrite,
+    output  wire            memtoreg
 );
     wire    [6:0]   i_opcode = opcode;
     wire    [6:0]   i_funct7 = funct7;
@@ -83,6 +113,15 @@ module ctrl_unit(
         .opcode     (i_opcode),
         .regwrite   (o_regwrite)
     );
+
+    assign alu_src = (opcode == 7'b0110011) ? 0 :
+                     (opcode == 7'b0010011) ? 1 :
+                     alu_src;
+
+    assign memwrite = (opcode == 7'b0100011) ? 1 : 0;
+
+    assign memtoreg = (opcode == 7'b0000011) ? 1 : 0; 
+
 endmodule
 
 module alu_det(
@@ -95,24 +134,24 @@ module alu_det(
         case (opcode)
             `OP_R:
                 case ({funct7, funct3})
-                    10'b0000000_000:    alu_ctrl <= 5'b00000; //ADD
-                    10'b0100000_000:    alu_ctrl <= 5'b10000; //SUB
-                    10'b0000000_001:    alu_ctrl <= 5'b00100; //SLL
-                    10'b0000000_010:    alu_ctrl <= 5'b10111; //SLT
-                    10'b0000000_011:    alu_ctrl <= 5'b11000; //SLTU
-                    10'b0000000_100:    alu_ctrl <= 5'b00011; //XOR
-                    10'b0000000_101:    alu_ctrl <= 5'b00101; //SRL
-                    10'b0100000_101:    alu_ctrl <= 5'b00110; //SRA
-                    10'b0000000_110:    alu_ctrl <= 5'b00010; //OR
-                    10'b0000000_111:    alu_ctrl <= 5'b00001; //AND
+                    10'b0000000_000:    alu_ctrl <= 5'b00000;  //ADD
+                    10'b0100000_000:    alu_ctrl <= 5'b10000;  //SUB
+                    10'b0000000_001:    alu_ctrl <= 5'b00100;  //SLL
+                    10'b0000000_010:    alu_ctrl <= 5'b10111;  //SLT
+                    10'b0000000_011:    alu_ctrl <= 5'b11000;  //SLTU
+                    10'b0000000_100:    alu_ctrl <= 5'b00011;  //XOR
+                    10'b0000000_101:    alu_ctrl <= 5'b00101;  //SRL
+                    10'b0100000_101:    alu_ctrl <= 5'b00110;  //SRA
+                    10'b0000000_110:    alu_ctrl <= 5'b00010;  //OR
+                    10'b0000000_111:    alu_ctrl <= 5'b00001;  //AND
                     default:    alu_ctrl <= 5'bxxxxx;
                 endcase
             
             `OP_I:
                 case ({funct7, funct3})
-                    10'b0000000_001:    alu_ctrl <= 5'b00100;   //SLLI
-                    10'b0000000_101:    alu_ctrl <= 5'b00110;   //SRLI
-                    10'b0100000_101:    alu_ctrl <= 5'b00110;   //SRAI
+                    10'b0000000_001:    alu_ctrl <= 5'b00100;  //SLLI
+                    10'b0000000_101:    alu_ctrl <= 5'b00110;  //SRLI
+                    10'b0100000_101:    alu_ctrl <= 5'b00110;  //SRAI
                     10'bxxxxxxx_000:    alu_ctrl <= 5'b00000;  //ADDI
                     10'bxxxxxxx_010:    alu_ctrl <= 5'b10111;  //SLTI
                     10'bxxxxxxx_011:    alu_ctrl <= 5'b11000;  //SLTIU
@@ -278,4 +317,5 @@ module regfile (
             5'd31:  rs2_data <= x[31];
         endcase
     end
+    
 endmodule
