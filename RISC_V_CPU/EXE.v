@@ -14,6 +14,7 @@ module EXE (
     wire    [4:0]       alu_ctrl = i_alu_ctrl;
     assign  rs2_data    = i_alu_src ? i_imm : i_rs1_data;
     assign  o_data_wr   = i_rs2_data;
+    assign  o_Z = Z;
 
     alu arithmetic_logic (
         .a          (i_rs1_data ),

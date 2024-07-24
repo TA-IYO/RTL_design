@@ -34,7 +34,7 @@ module data_memory (
     reg [31:0] memory [0:255];
 
     initial begin
-        $readmemh("data_mem.txt", memory);
+        $readmemh("data_mem.mem", memory);
     end
 
     always @(posedge clk) begin

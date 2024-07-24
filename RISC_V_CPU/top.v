@@ -1,3 +1,10 @@
+`include "IF.v"
+`include "ID.v"
+`include "EXE.v"
+`include "MEM.v"
+`include "WB.v"
+`include "inst_mem.mem"
+`include "data_mem.mem"
 
 module top(
     input   wire    clk,

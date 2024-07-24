@@ -1,3 +1,4 @@
+
 module IF(
     input   wire                i_clk,
     input   wire                i_rstn,
@@ -12,7 +13,7 @@ module IF(
     wire    rstn    =   i_rstn;
     wire    [31:0]      i_pc;
     wire    [31:0]      o_pc;
-    wire    [31:0]      next_pc = o_pc + 4;
+    wire    [31:0]      next_pc;
 
     wire    [31:0]      imm_i = (i_imm_i << 1);
     wire    [31:0]      imm_j = (i_imm_j << 1);
@@ -30,7 +31,8 @@ module IF(
         .clk        (clk    ),
         .rstn       (rstn   ),
         .i_pc       (i_pc   ),
-        .o_pc       (o_pc   )
+        .o_pc       (o_pc   ),
+        .o_next_pc  (next_pc)
     );
 
     inst_memory INST (
@@ -47,13 +49,18 @@ module pc(
     input   wire                clk,
     input   wire                rstn,
     input   wire    [31:0]      i_pc,
-    output  reg     [31:0]      o_pc
+    output  reg     [31:0]      o_pc,
+    output  reg     [31:0]      o_next_pc
 );
     always @(posedge clk, negedge rstn) begin
-        if (~rstn)
-            o_pc  <=  32'h0;
-        else
-            o_pc  <=  i_pc;
+        if (~rstn)  begin
+            o_pc        <=  32'h0;
+            o_next_pc   <=  32'h0;
+        end
+        else    begin
+            o_pc        <=  i_pc;
+            o_next_pc   <=  i_pc + 4;
+        end
     end
 endmodule
 
@@ -70,7 +77,7 @@ module inst_memory (
     reg [31:0] memory [0:255];
 
     initial begin
-        $readmemh("inst_mem.txt", memory);
+        $readmemh("inst_mem.mem", memory, 0, 255);
     end
 
     always @(posedge clk) begin
