@@ -77,7 +77,7 @@ module inst_memory (
     reg [31:0] memory [0:255];
 
     initial begin
-        $readmemh("inst_mem.mem", memory, 0, 255);
+        $readmemh("inst.mem", memory, 0, 255);
     end
 
     always @(posedge clk) begin

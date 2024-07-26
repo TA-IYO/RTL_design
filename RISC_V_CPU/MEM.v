@@ -7,7 +7,7 @@ module MEM (
     output  wire    [31:0]      o_data_rd
 );
     wire            clk = i_clk;
-    wire            we = i_we;
+    wire            we  = i_we;
 
 data_memory DATA (
     .clk                (clk        ),           
@@ -34,7 +34,7 @@ module data_memory (
     reg [31:0] memory [0:255];
 
     initial begin
-        $readmemh("data_mem.mem", memory);
+        $readmemh("data.mem", memory);
     end
 
     always @(posedge clk) begin

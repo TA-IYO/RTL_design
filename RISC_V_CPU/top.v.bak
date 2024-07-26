@@ -1,4 +1,8 @@
-`timescale 1ns/10ps
+`include "IF.v"
+`include "ID.v"
+`include "EXE.v"
+`include "MEM.v"
+`include "WB.v"
 
 module top(
     input   wire    clk,
