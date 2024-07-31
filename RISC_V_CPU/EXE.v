@@ -1,5 +1,4 @@
 module EXE (
-    input   wire    [31:0]      i_pc,
     input   wire    [31:0]      i_rs1_data,
     input   wire    [31:0]      i_rs2_data,
     input   wire    [31:0]      i_imm,
@@ -12,7 +11,7 @@ module EXE (
     wire    N, Z, C, V;
     wire    [31:0]      rs2_data;
     wire    [4:0]       alu_ctrl = i_alu_ctrl;
-    assign  rs2_data    = i_alu_src ? i_imm : i_rs1_data;
+    assign  rs2_data    = i_alu_src ? i_imm : i_rs2_data;
     assign  o_data_wr   = i_rs2_data;
     assign  o_Z = Z;
 

@@ -1,33 +1,33 @@
-@0000
-00500093  
-00a00113
-002081b3
-00302023
-fff0006f
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
-00000000
+00500093  ; ADDI x1, x0, 5
+00a00113  ; ADDI x2, x0, 10
+002081b3  ; ADD x3, x1, x2
+00302023  ; SW x3, 0(x0)
+00000293  ; ADDI x5, x0, 0 (Load immediate zero into x5)
+00000313  ; ADDI x6, x0, 0 (Load immediate zero into x6)
+00028463  ; BEQ x5, x5, 4 (No-op jump)
+00500093  ; ADDI x1, x0, 5
+00a00113  ; ADDI x2, x0, 10
+002081b3  ; ADD x3, x1, x2
+00302023  ; SW x3, 0(x0)
+00000293  ; ADDI x5, x0, 0 (Load immediate zero into x5)
+00000313  ; ADDI x6, x0, 0 (Load immediate zero into x6)
+00030463  ; BEQ x0, x0, 4 (No-op jump)
+00028293  ; LW x5, 0(x5) (Load value from data memory address 0 into x5)
+00430313  ; LW x6, 4(x6) (Load value from data memory address 4 into x6)
+00000293  ; ADDI x5, x0, 0 (Load immediate zero into x5)
+00000313  ; ADDI x6, x0, 0 (Load immediate zero into x6)
+00030463  ; BEQ x0, x0, 4 (No-op jump)
+00500093  ; ADDI x1, x0, 5
+00a00113  ; ADDI x2, x0, 10
+002081b3  ; ADD x3, x1, x2
+00302023  ; SW x3, 0(x0)
+00028293  ; LW x5, 0(x5) (Load value from data memory address 0 into x5)
+00430313  ; LW x6, 4(x6) (Load value from data memory address 4 into x6)
+00500093  ; ADDI x1, x0, 5
+00a00113  ; ADDI x2, x0, 10
+002081b3  ; ADD x3, x1, x2
+00302023  ; SW x3, 0(x0)
+fff0006f  ; J -1 (무한 루프)
 00000000
 00000000
 00000000

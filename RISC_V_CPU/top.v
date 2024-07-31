@@ -5,7 +5,6 @@ module top(
     input   wire    rstn
 );
 //IF
-    wire    [31:0]      pc;
     wire    [31:0]      instruction;
     wire    [31:0]      jal_addr;
 //ID             
@@ -29,7 +28,8 @@ module top(
     wire    [31:0]      data_addr_to_reg;
     wire    [31:0]      data_rd;
 
-    wire    btaken = (beq == Z);
+    wire    btaken = ~beq ? 0 :  
+                     ~Z   ? 0 : 1;
 
     IF instruction_fetch (
         .i_clk          (clk        ),
@@ -60,7 +60,6 @@ module top(
     );
 
     EXE execution (
-        .i_pc            (pc         ),
         .i_rs1_data      (rs1_data   ),
         .i_rs2_data      (rs2_data   ),
         .i_imm           (immediate_i),

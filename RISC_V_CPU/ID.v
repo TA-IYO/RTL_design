@@ -39,13 +39,14 @@
         wire    [31:0]  rd_data = i_rd_data;
         wire            memtoreg;
 
-        assign funct7   =   inst[31:25];
-        assign rs2      =   inst[24:20];
-        assign rs1      =   inst[19:15];
-        assign funct3   =   inst[14:12];
-        assign rd       =   inst[11:7];
-        assign opcode   =   inst[6:0];
-        assign o_alu_ctrl = alu_ctrl;
+        assign funct7       =   inst[31:25];
+        assign rs2          =   inst[24:20];
+        assign rs1          =   inst[19:15];
+        assign funct3       =   inst[14:12];
+        assign rd           =   inst[11:7];
+        assign opcode       =   inst[6:0];
+        assign o_alu_ctrl   =   alu_ctrl;
+        assign o_rd         =   rd;
 
     ctrl_unit control_unit(
         .opcode         (opcode)    ,
@@ -147,7 +148,7 @@
                     endcase
                 
                 `OP_I:
-                    case ({funct7, funct3})
+                    casex ({funct7, funct3})
                         10'b0000000_001:    alu_ctrl <= 5'b00100;  //SLLI
                         10'b0000000_101:    alu_ctrl <= 5'b00110;  //SRLI
                         10'b0100000_101:    alu_ctrl <= 5'b00110;  //SRAI
